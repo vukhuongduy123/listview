@@ -12,7 +12,6 @@
 #include "linkedandstruct.h"
 #define NUMOFITEMS 6
 using namespace std;
-/*  Declare Windows procedure  */
 
 HINSTANCE hInst;
 HWND hGListView;
@@ -49,30 +48,24 @@ int WINAPI WinMain (HINSTANCE hThisInstance,
                      LPSTR lpszArgument,
                      int nCmdShow)
 {
-    HWND hwnd;               /* This is the handle for our window */
-    MSG messages;            /* Here messages to the application are saved */
-    WNDCLASS wincl;        /* Data structure for the windowclass */
+    HWND hwnd;               
+    MSG messages;            
+    WNDCLASS wincl;        
 
-    /* The Window structure */
     wincl.hInstance = hThisInstance;
     wincl.lpszClassName = szClassName;
-    wincl.lpfnWndProc = WindowProcedure;      /* This function is called by windows */
-    wincl.style = CS_DBLCLKS;                 /* Catch double-clicks */
-
-    /* Use default icon and mouse-pointer */
+    wincl.lpfnWndProc = WindowProcedure;      
+    wincl.style = CS_DBLCLKS;                 
     wincl.hIcon = LoadIcon (NULL, IDI_APPLICATION);
     wincl.hCursor = LoadCursor (NULL, IDC_ARROW);
-    wincl.lpszMenuName = NULL;                 /* No menu */
-    wincl.cbClsExtra = 0;                      /* No extra bytes after the window class */
-    wincl.cbWndExtra = 0;                      /* structure or the window instance */
-    /* Use Windows's default colour as the background of the window */
+    wincl.lpszMenuName = NULL;                
+    wincl.cbClsExtra = 0;                      
+    wincl.cbWndExtra = 0;                      
     wincl.hbrBackground = (HBRUSH) GetStockObject(WHITE_BRUSH);
 
-    /* Register the window class, and if it fails quit the program */
     if (!RegisterClass (&wincl))
         return 0;
 
-    /* The class is registered, let's create the program*/
     hwnd = CreateWindowEx (
            0,                   /* Extended possibilites for variation */
            szClassName,         /* Classname */
@@ -87,9 +80,7 @@ int WINAPI WinMain (HINSTANCE hThisInstance,
            hThisInstance,       /* Program Instance handler */
            NULL                 /* No Window Creation data */
            );
-    /* Make the window visible on the screen */
     ShowWindow (hwnd, nCmdShow);
-    /* Run the message loop. It will run until GetMessage() returns 0 */
         while (GetMessage (&messages, NULL, 0, 0))
         {
             if (hwndGsearchDialog == NULL || !IsDialogMessage (hwndGsearchDialog, &messages))
@@ -98,33 +89,7 @@ int WINAPI WinMain (HINSTANCE hThisInstance,
                     DispatchMessage (&messages) ;
             }
         }
-    /* The program return-value is 0 - The value that PostQuitMessage() gave */
     return messages.wParam;
-}
-bool check(LPTSTR name,int textname,LPTSTR pass,int textpass)
-{
-    bool flagName=false,flagPass=false;
-    if(5==textname)
-        {
-        if(8==textpass)
-        {
-        for(int i=0;i<5;++i)
-            if(name[i]!=loginName[i])
-                return false;
-        flagName=true;
-        for(int i=0;i<8;++i)
-            if(pass[i]!=loginPass[i])
-                return false;
-        flagPass=true;
-        if(flagName&&flagPass)
-            return true;
-        return false;
-        }
-        else
-            return false;
-        }
-    else
-        return false;
 }
 
 LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -270,13 +235,11 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
                     }
                 }
                 if(((LPNMHDR)lParam)->code==LVN_COLUMNCLICK)
-                {
                     ListView_SortItems(hwndListView,ListViewCompareProc,(LPARAM)(pNm->iSubItem));
-                }
             }
             return 0;
         case WM_DESTROY:
-            PostQuitMessage (0);       /* send a WM_QUIT to the message queue */
+            PostQuitMessage (0); 
             break;
         default:
             if(message==messageFind)
@@ -428,7 +391,7 @@ INT_PTR CALLBACK DialogPro(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam
             textpass=GetWindowTextLength(hwndEdit[1]);
             pass=new TCHAR[textname+1];
             GetWindowText(hwndEdit[1],pass,textpass+1);
-            if(check(name,textname,pass,textpass))
+            if(strcmp(pass,loginPass)==0&&strcmp(name,loginName)==0)
             {
                 EndDialog(hwnd,0);
                 delete[] name;
