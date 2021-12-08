@@ -1,2 +1,2 @@
 # listview
-Listview using win32api
+Listview using win32api to control goods
